@@ -19,21 +19,39 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Vehicles'),
       ),
       body: _getBody(),
-      drawer: _getMechanicMenu(),
+      drawer: widget.token.user.userType == 0
+       ?  _getMechanicMenu() 
+       : _getCustomerMenu(),
     );
   }
 
   Widget _getBody() {
     return Container(
       margin: EdgeInsets.all(30),
-      child: Center(
-        child: Text(
-          'Bienvenid@ ${widget.token.user.fullName}',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight:  FontWeight.bold
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(150),
+              child: FadeInImage(
+              placeholder: AssetImage('assets/Vehicles_logo.png'),
+              image: NetworkImage(widget.token.user.imageFullPath),
+              height: 300,
+              fit: BoxFit.cover
+            ),
           ),
-        ),
+          
+           SizedBox(height: 30,),
+          Center(
+            child: Text(
+              'Bienvenid@ ${widget.token.user.fullName}',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight:  FontWeight.bold
+              ),
+            ),
+          ),
+        ], 
       ),
     );
   }
@@ -98,4 +116,45 @@ class _HomeScreenState extends State<HomeScreen> {
      ),
    );
  }
+
+  Widget _getCustomerMenu() {
+      return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            child: Image(
+              image: AssetImage('assets/Vehicles_logo.png'),
+            )
+          ),
+          ListTile(
+            leading: Icon(Icons.two_wheeler),
+            title: const Text('Mis Vehiculos'),
+            onTap: () {},
+          ),
+          Divider(
+            color: Colors.black,
+            height: 2,
+          ),
+          ListTile(
+            leading: Icon(Icons.face),
+            title: const Text('Editar Perfil'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: const Text('Cerrar Sesión'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen()
+                )
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
